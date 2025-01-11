@@ -4,7 +4,7 @@ nameOverride: ''
 
 webhook:
   image:
-    repository: ghcr.io/yxwuxuanl/cert-manager-lego-webhook
+    repository: ghcr.io/pflum/cert-manager-lego-webhook
     tag: ''
   imagePullPolicy: IfNotPresent
   replicas: 1

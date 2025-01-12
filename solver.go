@@ -145,7 +145,12 @@ func (ls *LegoSolver) buildProvider(ch *v1alpha1.ChallengeRequest) (provider cha
 		return nil, fmt.Errorf("failed to load config: %w", err)
 	}
 
-	providerEnvs, err := ls.getProviderEnvs(cfg)
+	namespace := ch.ResourceNamespace
+	if cfg.EnvFrom.Secret.Namespace != "" {
+		namespace = cfg.EnvFrom.Secret.Namespace
+	}
+
+	providerEnvs, err := ls.getProviderEnvs(cfg, namespace)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get provider envs: %w", err)
 	}
@@ -156,7 +161,7 @@ func (ls *LegoSolver) buildProvider(ch *v1alpha1.ChallengeRequest) (provider cha
 	}, nil
 }
 
-func (ls *LegoSolver) getProviderEnvs(cfg *WebhookConfig) (map[string]string, error) {
+func (ls *LegoSolver) getProviderEnvs(cfg *WebhookConfig, namespace string) (map[string]string, error) {
 	if cfg.Envs != nil {
 		return *cfg.Envs, nil
 	}
@@ -165,7 +170,7 @@ func (ls *LegoSolver) getProviderEnvs(cfg *WebhookConfig) (map[string]string, er
 		return nil, nil
 	}
 
-	secret, err := ls.Secrets(cfg.EnvFrom.Secret.Namespace).Get(ls.ctx, cfg.EnvFrom.Secret.Name, metav1.GetOptions{})
+	secret, err := ls.Secrets(namespace).Get(ls.ctx, cfg.EnvFrom.Secret.Name, metav1.GetOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get secret: %w", err)
 	}

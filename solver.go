@@ -146,7 +146,7 @@ func (ls *LegoSolver) buildProvider(ch *v1alpha1.ChallengeRequest) (provider cha
 	}
 
 	namespace := *ch.ResourceNamespace
-	if cfg.EnvFrom.Secret.Namespace != nil {
+	if cfg.EnvFrom.Secret.Namespace != "" {
 		namespace = *cfg.EnvFrom.Secret.Namespace
 	}
 

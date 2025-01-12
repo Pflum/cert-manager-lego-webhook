@@ -145,9 +145,9 @@ func (ls *LegoSolver) buildProvider(ch *v1alpha1.ChallengeRequest) (provider cha
 		return nil, fmt.Errorf("failed to load config: %w", err)
 	}
 
-	namespace := *ch.ResourceNamespace
+	namespace := ch.ResourceNamespace
 	if cfg.EnvFrom.Secret.Namespace != "" {
-		namespace = *cfg.EnvFrom.Secret.Namespace
+		namespace = cfg.EnvFrom.Secret.Namespace
 	}
 
 	providerEnvs, err := ls.getProviderEnvs(cfg, namespace)
